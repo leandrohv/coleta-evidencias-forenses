@@ -95,7 +95,7 @@ sudo /usr/local/sbin/coleta_evidencias_forenses.sh \
   "NÚMERO DO CONTRATO/PROCESSO" \
   "DIRETÓRIOS ALVO" \
   "PADRÃO_DE_ARQUIVO" \
-  "ID_OU_EMAIL_CHAVE_GPG_OU_SIGN_KEY_NAO_INFORMADO"
+  "EMAIL_CHAVE_GPG" OU "SIGN_KEY_NAO_INFORMADO"
 
 ```
 
