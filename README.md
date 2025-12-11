@@ -86,7 +86,23 @@ sudo ./coleta_evidencias_forenses.sh --install
 4. Após instalado:
 
 ```bash
-sudo /usr/local/sbin/coleta_evidencias_forenses.sh ...
+sudo /usr/local/sbin/coleta_evidencias_forenses.sh \
+  "CASE_ID" \
+  "NOME DO ANALISTA" \
+  "NOME DA ENTIDADE" \
+  "UNIDADE/SEÇÃO" \
+  "FORNECEDOR" \
+  "NÚMERO DO CONTRATO/PROCESSO" \
+  "DIRETÓRIOS ALVO" \
+  "PADRÃO_DE_ARQUIVO" \
+  "ID_OU_EMAIL_CHAVE_GPG_OU_SIGN_KEY_NAO_INFORMADO"
+
+```
+
+ou
+
+```bash
+sudo /usr/local/sbin/coleta_evidencias_forenses.sh CASE_ID ANALYST ENTITY UNIT SUPPLIER CONTRACT TARGET_DIRS FILE_PATTERN SIGN_KEY
 ```
 
 ---
