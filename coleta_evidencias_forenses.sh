@@ -14,8 +14,8 @@
 #   $1 -> CASE_ID       (Nº da tarefa/chamado, ex: TICKET-1234)
 #   $2 -> ANALYST       (nome do profissional/analista)
 #   $3 -> ENTITY        (nome da entidade/órgão)
-#   $4 -> UNIT          (unidade responsável: "Unidade responsável")
-#   $5 -> SUPPLIER      (nome do fornecedor: "Fornecedor A")
+#   $4 -> UNIT          (unidade/seção, ex: "Seção de TI", "SEIBIO/TSE")
+#   $5 -> SUPPLIER      (nome do fornecedor, ex: "Chaintech", "Griaule")
 #   $6 -> CONTRACT      (nº do contrato / processo)
 #   $7 -> TARGET_DIRS   (diretórios, ex: "/ /opt /usr /var /srv/app")
 #   $8 -> FILE_PATTERN  (padrão de nome, ex: "*log4j*.jar"; default: "*")
@@ -110,11 +110,11 @@ BUNDLE="${OUTDIR}.tar.gz"
 {
   echo "===================================================="
   echo " RELATÓRIO DE EVIDÊNCIAS FORENSES – COLETA DE ARQUIVOS"
-  echo "======================================================"
+  echo "===================================================="
   echo "Caso/Tarefa........: $CASE_ID"
   echo "Profissional.......: $ANALYST"
   echo "Entidade/Órgão.....: $ENTITY"
-  echo "Unidade............: $UNIT"
+  echo "Unidade/Seção......: $UNIT"
   echo "Fornecedor.........: $SUPPLIER"
   echo "Contrato/Processo..: $CONTRACT"
   echo "Hostname (FQDN)....: $HOSTNAME_FQDN"
@@ -154,14 +154,14 @@ fi
 
 # ========= CSV DE CADEIA DE CUSTÓDIA (HEADER) =========
 {
-  echo "Caso/Tarefa,Profissional,Entidade/Órgão,Unidade,Fornecedor,Contrato/Processo,Hostname (FQDN),Data/Hora (UTC),Usuário executor,Sistema operacional,Diretório de saída,Chave GPG (se usada),Diretórios analisados,Padrão de arquivo,Critério de busca,Caminho do arquivo,SHA-256"
+  echo "Caso/Tarefa,Profissional,Entidade/Órgão,Unidade/Seção,Fornecedor,Contrato/Processo,Hostname (FQDN),Data/Hora (UTC),Usuário executor,Sistema operacional,Diretório de saída,Chave GPG (se usada),Diretórios analisados,Padrão de arquivo,Critério de busca,Caminho do arquivo,SHA-256"
 } > "$CSV"
 
 # ========= BUSCA DE ARQUIVOS =========
 echo "[*] Iniciando busca por arquivos contendo padrão '$FILE_PATTERN'..." >&2
 
 find $TARGET_DIRS \
-  -xdev -type f -iname "$FILE_PATTERN" 2>/dev/null -print0 |
+  -xdev \( -type f -o -type l \) -iname "$FILE_PATTERN" 2>/dev/null -print0 |
 while IFS= read -r -d '' FILE; do
   {
     echo "-------------------------------------------------"
@@ -184,7 +184,7 @@ echo "[*] Calculando hashes SHA-256 dos arquivos..." >&2
 : > "$HASHES"
 
 find $TARGET_DIRS \
-  -xdev -type f -iname "$FILE_PATTERN" 2>/dev/null -print0 |
+  -xdev \( -type f -o -type l \) -iname "$FILE_PATTERN" 2>/dev/null -print0 |
 while IFS= read -r -d '' FILE; do
   SHA256=""
   if [ -r "$FILE" ]; then
