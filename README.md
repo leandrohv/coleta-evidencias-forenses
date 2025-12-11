@@ -149,7 +149,7 @@ Dentro dele, no mínimo:
    - Caso/Tarefa  
    - Profissional  
    - Entidade/Órgão  
-   - Unidade/Seção  
+   - Unidade  
    - Fornecedor  
    - Contrato/Processo  
    - Hostname (FQDN)  
@@ -299,7 +299,7 @@ sudo /usr/local/sbin/coleta_evidencias_forenses.sh   "TAREFA-LOG4J-1234"   "Nome
 ## 11. Referência Rápida
 
 ```bash
-sudo /usr/local/sbin/coleta_evidencias_forenses.sh   "CASE_ID"   "NOME DO ANALISTA"   "NOME DA ENTIDADE"   "UNIDADE/SEÇÃO"   "FORNECEDOR"   "NÚMERO DO CONTRATO/PROCESSO"   "DIRETÓRIOS ALVO"   "PADRÃO_DE_ARQUIVO"   "ID_OU_EMAIL_CHAVE_GPG_OU_SIGN_KEY_NAO_INFORMADO"
+sudo /usr/local/sbin/coleta_evidencias_forenses.sh   "CASE_ID"   "NOME DO ANALISTA"   "NOME DA ENTIDADE"   "UNIDADE"   "FORNECEDOR"   "NÚMERO DO CONTRATO/PROCESSO"   "DIRETÓRIOS ALVO"   "PADRÃO_DE_ARQUIVO"   "ID_OU_EMAIL_CHAVE_GPG_OU_SIGN_KEY_NAO_INFORMADO"
 ```
 
 Exemplo genérico:
