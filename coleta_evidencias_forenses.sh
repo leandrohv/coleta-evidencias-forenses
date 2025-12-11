@@ -249,24 +249,26 @@ echo "[*] Gerando manifesto de integridade (SHA-256)..." >&2
     "$(basename "$DISK_INFO")" > "$MANIFEST"
 )
 
-# ========= BUNDLE DAS EVIDÊNCIAS =========
-echo "[*] Compactando evidências em: $BUNDLE" >&2
-(
-  cd "$(dirname "$OUTDIR")"
-  tar -czf "$(basename "$BUNDLE")" "$(basename "$OUTDIR")"
-)
-
 # ========= ASSINATURA GPG (OPCIONAL) =========
+SIGN_MANIFEST_OK="nao"
+SIGN_BUNDLE_OK="nao"
+
 if [ -n "${SIGN_KEY:-}" ]; then
   echo "[*] Assinando manifesto e bundle com GPG (chave: $SIGN_KEY)..." >&2
 
-  gpg --batch --yes --local-user "$SIGN_KEY" \
-      --output "${MANIFEST}.asc" --detach-sign "$MANIFEST" \
-      || echo "[!] Falha ao assinar manifesto com GPG" >&2
+  if gpg --batch --yes --local-user "$SIGN_KEY" \
+        --output "${MANIFEST}.asc" --detach-sign "$MANIFEST"; then
+    SIGN_MANIFEST_OK="sim"
+  else
+    echo "[!] Falha ao assinar manifesto com GPG" >&2
+  fi
 
-  gpg --batch --yes --local-user "$SIGN_KEY" \
-      --output "${BUNDLE}.asc" --detach-sign "$BUNDLE" \
-      || echo "[!] Falha ao assinar bundle com GPG" >&2
+  if gpg --batch --yes --local-user "$SIGN_KEY" \
+        --output "${BUNDLE}.asc" --detach-sign "$BUNDLE"; then
+    SIGN_BUNDLE_OK="sim"
+  else
+    echo "[!] Falha ao assinar bundle com GPG" >&2
+  fi
 fi
 
 echo
@@ -279,12 +281,22 @@ echo " Informações de disco....: $DISK_INFO"
 echo " Manifesto de integridade: $MANIFEST"
 echo " CSV cadeia de custódia..: $CSV"
 echo " Bundle compactado.......: $BUNDLE"
+
 if [ -n "${SIGN_KEY:-}" ]; then
-  echo " Assinatura manifesto....: ${MANIFEST}.asc"
-  echo " Assinatura bundle.......: ${BUNDLE}.asc"
+  if [ "$SIGN_MANIFEST_OK" = "sim" ]; then
+    echo " Assinatura manifesto....: ${MANIFEST}.asc"
+  else
+    echo " Assinatura manifesto....: [NÃO GERADA]"
+  fi
+  if [ "$SIGN_BUNDLE_OK" = "sim" ]; then
+    echo " Assinatura bundle.......: ${BUNDLE}.asc"
+  else
+    echo " Assinatura bundle.......: [NÃO GERADA]"
+  fi
 fi
+
 echo "==================================================="
 echo
 echo "RECOMENDAÇÕES:"
-echo "- Mover o .tar.gz e o(s) .asc para mídia somente leitura."
+echo "- Mover o .tar.gz e o(s) .asc (se gerados) para mídia somente leitura."
 echo "- Registrar o SHA-256 do bundle, do CSV, do arquivo de disco e o fingerprint da chave GPG na cadeia de custódia."
