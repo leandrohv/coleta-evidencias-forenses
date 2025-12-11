@@ -90,7 +90,7 @@ sudo /usr/local/sbin/coleta_evidencias_forenses.sh \
   "CASE_ID" \
   "NOME DO ANALISTA" \
   "NOME DA ENTIDADE" \
-  "UNIDADE/SEÇÃO" \
+  "UNIDADE" \
   "FORNECEDOR" \
   "NÚMERO DO CONTRATO/PROCESSO" \
   "DIRETÓRIOS ALVO" \
